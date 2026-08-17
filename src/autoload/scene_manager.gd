@@ -9,7 +9,8 @@ signal scene_change_finished(target: String)
 const TRANSITION_DURATION := 0.25
 
 var _current: String = ""
-var _history: PackedStringArray = []
+# Array[String] (not PackedStringArray) so we can use pop_back() in Godot 4.7.x.
+var _history: Array[String] = []
 
 
 func goto_scene(path: String, record_history: bool = true) -> void:
