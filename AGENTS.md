@@ -25,7 +25,7 @@ iOS (App Store). Portrait-first, touch-first, safe-area aware, responsive.
   `AppConfig` (tuning/identity) → `GameManager` (state+signals) →
   `SaveManager` (debounced JSON save to `user://`) → `AudioManager` (SFX pool
   + buses) → `SceneManager` (scene transitions + history) →
-  `HapticManager` (`DisplayServer.vibrate_handheld`).
+  `HapticManager` (`Input.vibrate_handheld`, no-op on desktop).
 - Scene flow: `BootScene` → `MainMenuScene` → `GameScene` (+ `GameHud`
   CanvasLayer). HUD subscribes to GameManager signals.
 - Gameplay: `JunkItem` (Area2D, falls, emits `body_collected`) collected by

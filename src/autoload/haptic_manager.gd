@@ -1,7 +1,8 @@
 extends Node
 ## HapticManager
-## Cross-platform vibration via DisplayServer.vibrate_handheld. No-op on
-## desktop. Toggleable via save settings for accessibility.
+## Cross-platform vibration via Input.vibrate_handheld (Godot 4.x).
+## Implemented on Android, iOS, Web; no-op on desktop. Toggleable via save
+## settings for accessibility.
 
 var enabled: bool = true
 
@@ -21,5 +22,7 @@ func heavy() -> void:
 func _trigger(duration_ms: int) -> void:
 	if not enabled or not AppConfig.is_mobile():
 		return
-	# Godot 4 portable API. Effectively a no-op on desktop builds.
-	DisplayServer.vibrate_handheld(duration_ms)
+	# Input.vibrate_handheld() is the correct Godot 4.x API. It is a no-op on
+	# desktop platforms (Android/iOS/Web only). Requires the VIBRATE permission
+	# in the Android export preset.
+	Input.vibrate_handheld(duration_ms)
