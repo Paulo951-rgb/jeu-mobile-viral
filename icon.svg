@@ -1,1 +1,26 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><rect width="124" height="124" x="2" y="2" fill="#363d52" stroke="#212532" stroke-width="4" rx="14"/><g fill="#fff" transform="translate(12.322 12.322)scale(.101)"><path d="M105 673v33q407 354 814 0v-33z"/><path fill="#478cbf" d="m105 673 152 14q12 1 15 14l4 67 132 10 8-61q2-11 15-15h162q13 4 15 15l8 61 132-10 4-67q3-13 15-14l152-14V427q30-39 56-81-35-59-83-108-43 20-82 47-40-37-88-64 7-51 8-102-59-28-123-42-26 43-46 89-49-7-98 0-20-46-46-89-64 14-123 42 1 51 8 102-48 27-88 64-39-27-82-47-48 49-83 108 26 42 56 81zm0 33v39c0 276 813 276 814 0v-39l-134 12-5 69q-2 10-14 13l-162 11q-12 0-16-11l-10-65H446l-10 65q-4 11-16 11l-162-11q-12-3-14-13l-5-69z"/><path d="M483 600c0 34 58 34 58 0v-86c0-34-58-34-58 0z"/><circle cx="725" cy="526" r="90"/><circle cx="299" cy="526" r="90"/></g><g fill="#414042" transform="translate(12.322 12.322)scale(.101)"><circle cx="307" cy="532" r="60"/><circle cx="717" cy="532" r="60"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b3a55"/>
+      <stop offset="1" stop-color="#16203a"/>
+    </linearGradient>
+    <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffd35a"/>
+      <stop offset="1" stop-color="#e8941a"/>
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="1024" rx="228" fill="url(#bg)"/>
+  <g transform="translate(512 560)">
+    <rect x="-300" y="120" width="600" height="60" rx="30" fill="#3c4862"/>
+    <rect x="-220" y="-30" width="150" height="150" rx="18" fill="#5a6b8c" transform="rotate(-12)"/>
+    <rect x="-60" y="-10" width="120" height="120" rx="16" fill="#6b7b9c" transform="rotate(8)"/>
+    <rect x="90" y="-40" width="180" height="180" rx="20" fill="#475571" transform="rotate(-6)"/>
+    <path d="M0 -260 a150 150 0 0 1 150 150 l0 60 -90 0 0 -60 a60 60 0 0 0 -120 0 l0 60 -90 0 0 -60 a150 150 0 0 1 150 -150 z" fill="url(#metal)"/>
+    <rect x="-90" y="-70" width="180" height="40" rx="20" fill="#7a4b1a"/>
+  </g>
+  <g stroke="#ffd35a" stroke-width="14" stroke-linecap="round" opacity="0.7">
+    <line x1="180" y1="200" x2="300" y2="200"/>
+    <line x1="720" y1="200" x2="840" y2="200"/>
+  </g>
+  <text x="512" y="930" font-family="Arial, sans-serif" font-size="96" font-weight="bold" fill="#ffd35a" text-anchor="middle">JunkYardRush</text>
+</svg>

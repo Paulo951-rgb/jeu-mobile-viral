@@ -10,21 +10,81 @@ config_version=5
 
 [application]
 
-config/name="Jeu Mobile"
+config/name="JunkYardRush"
+config/description="Collect, sort and upgrade junk into treasure in a fast-paced mobile rush."
+config/version="0.1.0"
+; Unique application/bundle identifier. Change "yourstudio" to your studio name
+; before publishing to Google Play / App Store.
+config/bundle_identifier="com.yourstudio.junkyardrush"
+config/company_name="Your Studio"
+config/product_name="JunkYardRush"
+config/quit_on_go_back=true
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
+; First scene loaded on launch (boot handles init + safe-area setup).
+run/main_scene="res://src/scenes/boot/BootScene.tscn"
+
+[autoload]
+
+AppConfig="*res://src/autoload/app_config.gd"
+GameManager="*res://src/autoload/game_manager.gd"
+SaveManager="*res://src/autoload/save_manager.gd"
+AudioManager="*res://src/autoload/audio_manager.gd"
+SceneManager="*res://src/autoload/scene_manager.gd"
+HapticManager="*res://src/autoload/haptic_manager.gd"
 
 [display]
 
+; Mobile-first: portrait by default. Architecture allows flipping
+; window/handheld/orientation from one place (AppConfig.ORIENTATION).
+window/size/viewport_width=720
+window/size/viewport_height=1280
+window/size/window_width_override=720
+window/size/window_height_override=1280
+window/size/test_width=720
+window/size/test_height=1280
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/stretch/shrink="1.0"
+window/handheld/orientation="portrait"
+window/handheld/supports_vibrate=true
+window/window_placement/rect=2
+window/subwindows/embed_subwindows=true
+
+[input]
+
+; Touch is consumed directly via _input(InputEventScreenTouch/Drag) in
+; gameplay code, so no custom touch actions are required. Pause is mapped to
+; the Escape key (and Android hardware Back via NOTIFICATION_WM_GO_BACK_REQUEST).
+pause={
+"deadzone": 0.5,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"location":0,"echo":false), Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194305,"key_label":0,"unicode":0,"location":1,"echo":false)]
+}
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://src/data/translations.csv")
+locale/fallback="en"
 
 [physics]
 
 3d/physics_engine="Jolt Physics"
+common/physics_ticks_per_second=60
+
+[layer_names]
+
+2d_physics/layer_1="player"
+2d_physics/layer_2="junk"
+2d_physics/layer_3="obstacle"
+2d_physics/layer_4="sensor"
+2d_physics/layer_5="ui"
 
 [rendering]
 
-rendering_device/driver.windows="d3d12"
+; Mobile: GL Compatibility renderer works on a broad range of low-end
+; Android devices and iOS. Vulkan/Metal pipelines can be revisited later
+; for high-end devices without changing gameplay code.
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/texture_channel_pack="1"
+environment/defaults/default_clear_color=Color(0.11, 0.11, 0.14, 1)
