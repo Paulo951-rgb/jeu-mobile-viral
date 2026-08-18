@@ -22,7 +22,9 @@ const ORIENTATION := "portrait"
 const BASE_VIEWPORT := Vector2i(720, 1280)
 # Minimum comfortable touch target (Google: 48dp, Apple: 44pt).
 const MIN_TOUCH_SIZE_DP := 56.0
-# Safe-area insets are applied at runtime via SafeAreaContainer (Window.get_safe_area()).
+# Safe-area insets are applied at runtime via SafeAreaContainer
+# (DisplayServer.get_display_safe_area() — Window.get_safe_area() does NOT
+# exist in Godot 4.x).
 
 # ---- Gameplay tuning ---------------------------------------------------------
 const STARTING_COINS := 0
