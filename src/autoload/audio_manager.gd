@@ -52,9 +52,15 @@ func _notification(what: int) -> void:
 		return
 	match what:
 		NOTIFICATION_APPLICATION_PAUSED:
-			AudioServer.set_bus_mute(AudioServer.get_bus_index(SFX_BUS), true)
+			var idx := AudioServer.get_bus_index(SFX_BUS)
+			if idx != -1:
+				AudioServer.set_bus_mute(idx, true)
 		NOTIFICATION_APPLICATION_RESUMED:
-			AudioServer.set_bus_mute(AudioServer.get_bus_index(SFX_BUS), false)
+			# Restore the user's intended mute state instead of forcing unmute,
+			# so an explicitly muted game stays muted after backgrounding.
+			var idx := AudioServer.get_bus_index(SFX_BUS)
+			if idx != -1:
+				AudioServer.set_bus_mute(idx, _muted)
 
 
 func play_sfx(stream: AudioStream, pitch: float = 1.0, volume_db: float = 0.0) -> void:

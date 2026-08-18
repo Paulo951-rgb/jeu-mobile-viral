@@ -28,10 +28,10 @@ run/main_scene="res://src/scenes/boot/BootScene.tscn"
 
 AppConfig="*res://src/autoload/app_config.gd"
 GameManager="*res://src/autoload/game_manager.gd"
-SaveManager="*res://src/autoload/save_manager.gd"
 AudioManager="*res://src/autoload/audio_manager.gd"
-SceneManager="*res://src/autoload/scene_manager.gd"
 HapticManager="*res://src/autoload/haptic_manager.gd"
+SaveManager="*res://src/autoload/save_manager.gd"
+SceneManager="*res://src/autoload/scene_manager.gd"
 
 [display]
 

@@ -32,13 +32,13 @@ func queue_save() -> void:
 
 
 func save_now() -> void:
+	_dirty = true
 	_flush_save()
 
 
 func _flush_save() -> void:
 	if not _dirty:
 		return
-	_dirty = false
 
 	var data := {
 		"version": SAVE_VERSION,
@@ -58,6 +58,8 @@ func _flush_save() -> void:
 		return
 	file.store_string(JSON.stringify(data, "\t"))
 	file.close()
+	# Only clear dirty once the write succeeded, so a failed write is retried.
+	_dirty = false
 	saved.emit()
 
 
@@ -86,10 +88,16 @@ func load_save() -> bool:
 	GameManager.level = int(data.get("level", AppConfig.STARTING_LEVEL))
 	_best_score = int(data.get("best_score", 0))
 
-	var settings: Dictionary = data.get("settings", {})
-	AudioManager.master_volume_db = float(settings.get("master_volume_db", AppConfig.DEFAULT_MASTER_VOLUME_DB))
-	AudioManager.is_muted = bool(settings.get("muted", false))
-	HapticManager.enabled = bool(settings.get("haptics_enabled", true))
+	var settings_raw: Variant = data.get("settings", {})
+	if typeof(settings_raw) == TYPE_DICTIONARY:
+		var settings: Dictionary = settings_raw
+		AudioManager.master_volume_db = float(settings.get("master_volume_db", AppConfig.DEFAULT_MASTER_VOLUME_DB))
+		AudioManager.is_muted = bool(settings.get("muted", false))
+		HapticManager.enabled = bool(settings.get("haptics_enabled", true))
+	else:
+		AudioManager.master_volume_db = AppConfig.DEFAULT_MASTER_VOLUME_DB
+		AudioManager.is_muted = false
+		HapticManager.enabled = true
 
 	loaded.emit()
 	GameManager.coins_changed.emit(GameManager.coins)

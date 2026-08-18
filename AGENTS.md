@@ -21,16 +21,25 @@ iOS (App Store). Portrait-first, touch-first, safe-area aware, responsive.
 - **Safe area**: wrap screen UI in `SafeAreaContainer`.
 
 ## Architecture
-- Autoloads (see `project.godot [autoload]`):
-  `AppConfig` (tuning/identity) → `GameManager` (state+signals) →
-  `SaveManager` (debounced JSON save to `user://`) → `AudioManager` (SFX pool
-  + buses) → `SceneManager` (scene transitions + history) →
-  `HapticManager` (`Input.vibrate_handheld`, no-op on desktop).
+- Autoloads (see `project.godot [autoload]`), order matters for init:
+  `AppConfig` (tuning/identity + i18n loader) → `GameManager` (state+signals) →
+  `AudioManager` (SFX pool + buses) → `HapticManager` (`Input.vibrate_handheld`,
+  no-op on desktop) → `SaveManager` (debounced JSON save to `user://`, loads
+  AudioManager/HapticManager settings) → `SceneManager` (fade transitions +
+  history). AudioManager/HapticManager load BEFORE SaveManager so the saved
+  audio/haptics settings aren't clobbered by their `_ready` defaults.
 - Scene flow: `BootScene` → `MainMenuScene` → `GameScene` (+ `GameHud`
-  CanvasLayer). HUD subscribes to GameManager signals.
-- Gameplay: `JunkItem` (Area2D, falls, emits `body_collected`) collected by
-  the player Area2D; awards score + coins; levels up every 100 score; spawn
-  interval shrinks per level.
+  CanvasLayer, `process_mode=ALWAYS` so pause overlay stays interactive). HUD
+  subscribes to GameManager signals. SceneManager owns a persistent black fade
+  CanvasLayer (layer 100, `process_mode=ALWAYS`).
+- Gameplay: `JunkItem` (Area2D, falls) emits `body_collected` (overlap with
+  player) or `exited_screen` (fell off bottom = miss). Collecting awards
+  `SCORE_PER_JUNK`/`COINS_PER_JUNK`; level derives from score
+  (`STARTING_LEVEL + score / SCORE_PER_LEVEL`); spawn interval shrinks per
+  level. Missing `MAX_MISSED_JUNK` pieces ends the run (`GameManager.end_run`
+  → `game_over` signal → HUD overlay → back to menu).
+- Controls: touch (mobile) + mouse (desktop) in `GameScene._input`. Pause via
+  on-screen button or the `pause` input action (Esc on desktop).
 
 ## Build / export
 - `export_presets.cfg` ships presets: Android (Debug APK), Android (Release

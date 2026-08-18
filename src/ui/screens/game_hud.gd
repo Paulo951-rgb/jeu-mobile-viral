@@ -13,6 +13,14 @@ func _ready() -> void:
 	GameManager.game_over.connect(_on_game_over)
 
 
+func _unhandled_input(event: InputEvent) -> void:
+	# Escape (desktop) / mapped pause key toggles pause, mirroring the on-screen
+	# pause button so the game is fully playable on Windows/macOS.
+	if event.is_action_pressed("pause") and GameManager.is_game_active:
+		_on_pause_pressed()
+		get_viewport().set_input_as_handled()
+
+
 var _score_label: Label
 var _coins_label: Label
 var _level_label: Label
@@ -116,4 +124,8 @@ func _on_level_changed(l: int) -> void:
 
 
 func _on_game_over(final_score: int) -> void:
-	_show_overlay("%s\n%s: %d" % [tr("GAME_OVER"), tr("SCORE"), final_score], tr("MENU"))
+	var best := SaveManager.get_best_score()
+	var title := "%s\n%s: %d\n%s: %d" % [tr("GAME_OVER"), tr("SCORE"), final_score, tr("BEST"), best]
+	if final_score >= best and final_score > 0:
+		title += "\n★"
+	_show_overlay(title, tr("MENU"))

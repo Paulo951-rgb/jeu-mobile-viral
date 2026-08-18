@@ -29,6 +29,12 @@ const STARTING_COINS := 0
 const STARTING_LEVEL := 1
 const JUNK_SPAWN_INTERVAL_SEC := 1.2
 const MAX_JUNK_ON_SCREEN := 18
+const SCORE_PER_JUNK := 10
+const COINS_PER_JUNK := 1
+const SCORE_PER_LEVEL := 100
+# How many junk pieces the player may miss before game over. Low-end devices
+# and one-handed play benefit from a forgiving threshold.
+const MAX_MISSED_JUNK := 5
 
 # ---- Save --------------------------------------------------------------------
 const SAVE_SLOT := "user://save_data.json"

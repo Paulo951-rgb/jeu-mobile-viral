@@ -2,13 +2,15 @@ extends Node2D
 ## GameScene
 ## Core gameplay prototype. Player drags / taps to collect falling "junk"
 ## items, which convert to coins & score. Spawning ramps with level.
-## Designed to be cheap to render on low-end Android devices.
+## Missing too many junk pieces ends the run. Designed to be cheap to render
+## on low-end Android devices.
+
+const _JUNK_SCRIPT := preload("res://src/scenes/game/junk_item.gd")
 
 var _player: Area2D
 var _spawn_timer: Timer
 var _junk_container: Node2D
 var _hud: CanvasLayer
-var _active_junk: int = 0
 
 
 func _ready() -> void:
@@ -44,36 +46,52 @@ func _build_world() -> void:
 	_spawn_timer.start()
 
 	_hud = preload("res://src/ui/screens/game_hud.tscn").instantiate()
+	# Keep the HUD interactive while the tree is paused so the pause overlay's
+	# Resume button stays clickable (otherwise the player gets stuck in pause).
+	_hud.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(_hud)
 
 
 func _position_player_at_touch(pos: Vector2) -> void:
-	_player.position = pos
+	# Keep the player inside the visible viewport so a touch near an edge
+	# doesn't move the collector off-screen.
+	var vp := get_viewport().get_visible_rect()
+	var half := Vector2(70, 70)
+	_player.position = Vector2(
+		clamp(pos.x, vp.position.x + half.x, vp.end.x - half.x),
+		clamp(pos.y, vp.position.y + half.y, vp.end.y - half.y)
+	)
 
 
 func _input(event: InputEvent) -> void:
+	# Touch (mobile) + mouse (desktop) so the game is testable on Windows/macOS.
 	if event is InputEventScreenTouch and event.pressed:
 		_position_player_at_touch(event.position)
 	elif event is InputEventScreenDrag:
 		_position_player_at_touch(event.position)
+	elif event is InputEventMouseButton and event.pressed:
+		_position_player_at_touch(event.position)
+	elif event is InputEventMouseMotion and event.button_mask != 0:
+		_position_player_at_touch(event.position)
 
 
 func _spawn_junk() -> void:
-	if _active_junk >= AppConfig.MAX_JUNK_ON_SCREEN:
+	# Use live child count so junk that already left (missed) or was collected
+	# stops counting. A manual counter would desync and block spawning forever.
+	if _junk_container.get_child_count() >= AppConfig.MAX_JUNK_ON_SCREEN:
 		return
 	var vp := get_viewport().get_visible_rect()
 	var junk := _make_junk()
 	junk.position = Vector2(randf_range(vp.position.x + 40, vp.end.x - 40), vp.position.y - 40)
 	junk.body_collected.connect(_on_junk_collected)
+	junk.exited_screen.connect(_on_junk_missed)
 	_junk_container.add_child(junk)
-	_active_junk += 1
 
 
 func _make_junk() -> Area2D:
 	# Build junk via script-first Area2D so _ready connects signals.
-	var script := load("res://src/scenes/game/junk_item.gd")
 	var junk := Area2D.new()
-	junk.set_script(script)
+	junk.set_script(_JUNK_SCRIPT)
 	junk.collision_layer = 2
 	junk.collision_mask = 1
 	var col := CollisionShape2D.new()
@@ -91,13 +109,15 @@ func _make_junk() -> Area2D:
 
 func _on_junk_collected(junk: Area2D) -> void:
 	junk.queue_free()
-	_active_junk = max(_active_junk - 1, 0)
-	GameManager.add_score(10)
-	GameManager.add_coins(1)
-	# Level up every 100 score.
-	if GameManager.score > 0 and GameManager.score % 100 == 0:
-		GameManager.add_level(1)
-		_spawn_timer.wait_time = max(0.4, _spawn_timer.wait_time * 0.9)
+	GameManager.add_score(AppConfig.SCORE_PER_JUNK)
+	GameManager.add_coins(AppConfig.COINS_PER_JUNK)
+	# Speed up spawning as the level rises for escalating difficulty.
+	var interval := max(0.4, AppConfig.JUNK_SPAWN_INTERVAL_SEC * pow(0.9, GameManager.level - AppConfig.STARTING_LEVEL))
+	_spawn_timer.wait_time = interval
+
+
+func _on_junk_missed(junk: Area2D) -> void:
+	GameManager.register_miss()
 
 
 func _on_game_over(_score: int) -> void:

@@ -59,6 +59,7 @@ func _build_ui() -> void:
 
 var _coins_label: Label
 var _best_label: Label
+var _overlay: Control
 
 
 func _make_stat_label(parent: HBoxContainer, title: String, value: String) -> Label:
@@ -99,8 +100,47 @@ func _on_play_pressed() -> void:
 
 
 func _on_settings_pressed() -> void:
-	# Placeholder — settings panel to be added in a later milestone.
-	pass
+	_show_info_overlay(tr("SETTINGS"), tr("SETTINGS_COMING"))
+
+
+func _show_info_overlay(title: String, body: String) -> void:
+	_hide_overlay()
+	_overlay = Control.new()
+	_overlay.set_anchors_preset(PRESET_FULL_RECT)
+	_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	var color := ColorRect.new()
+	color.color = Color(0, 0, 0, 0.55)
+	color.set_anchors_preset(PRESET_FULL_RECT)
+	_overlay.add_child(color)
+	var wrapper := SafeAreaContainer.new()
+	wrapper.set_anchors_preset(PRESET_FULL_RECT)
+	_overlay.add_child(wrapper)
+	var vbox := VBoxContainer.new()
+	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_theme_constant_override("separation", 24)
+	wrapper.add_child(vbox)
+	var t := Label.new()
+	t.text = title
+	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.add_theme_font_size_override("font_size", 48)
+	vbox.add_child(t)
+	var b := Label.new()
+	b.text = body
+	b.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	b.add_theme_font_size_override("font_size", 24)
+	vbox.add_child(b)
+	var close := TouchButton.new()
+	close.text = tr("MENU")
+	close.custom_minimum_size = Vector2(280, AppConfig.MIN_TOUCH_SIZE_DP * 2)
+	close.pressed.connect(_hide_overlay)
+	vbox.add_child(close)
+	add_child(_overlay)
+
+
+func _hide_overlay() -> void:
+	if _overlay:
+		_overlay.queue_free()
+		_overlay = null
 
 
 func _on_coins_changed(amount: int) -> void:
