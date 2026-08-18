@@ -17,7 +17,7 @@ func _ready() -> void:
 
 func _build_ui() -> void:
 	var root := SafeAreaContainer.new()
-	root.set_anchors_preset(PRESET_FULL_RECT)
+	root.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(root)
 
 	var vbox := VBoxContainer.new()
@@ -27,14 +27,14 @@ func _build_ui() -> void:
 
 	var title := Label.new()
 	title.text = tr("APP_NAME")
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	title.horizontal_alignment = Control.HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 64)
 	title.add_theme_color_override("font_color", Color(1, 0.78, 0.2))
 	vbox.add_child(title)
 
 	var subtitle := Label.new()
 	subtitle.text = tr("TAGLINE")
-	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	subtitle.horizontal_alignment = Control.HORIZONTAL_ALIGNMENT_CENTER
 	subtitle.add_theme_color_override("font_color", Color(0.7, 0.75, 0.85))
 	vbox.add_child(subtitle)
 
@@ -67,11 +67,11 @@ func _make_stat_label(parent: HBoxContainer, title: String, value: String) -> La
 	col.alignment = BoxContainer.ALIGNMENT_CENTER
 	var t := Label.new()
 	t.text = title.to_upper()
-	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.horizontal_alignment = Control.HORIZONTAL_ALIGNMENT_CENTER
 	t.add_theme_color_override("font_color", Color(0.6, 0.65, 0.75))
 	var v := Label.new()
 	v.text = value
-	v.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.horizontal_alignment = Control.HORIZONTAL_ALIGNMENT_CENTER
 	v.add_theme_font_size_override("font_size", 32)
 	col.add_child(t)
 	col.add_child(v)
@@ -106,14 +106,14 @@ func _on_settings_pressed() -> void:
 func _show_info_overlay(title: String, body: String) -> void:
 	_hide_overlay()
 	_overlay = Control.new()
-	_overlay.set_anchors_preset(PRESET_FULL_RECT)
+	_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	var color := ColorRect.new()
 	color.color = Color(0, 0, 0, 0.55)
-	color.set_anchors_preset(PRESET_FULL_RECT)
+	color.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_overlay.add_child(color)
 	var wrapper := SafeAreaContainer.new()
-	wrapper.set_anchors_preset(PRESET_FULL_RECT)
+	wrapper.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_overlay.add_child(wrapper)
 	var vbox := VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -121,12 +121,12 @@ func _show_info_overlay(title: String, body: String) -> void:
 	wrapper.add_child(vbox)
 	var t := Label.new()
 	t.text = title
-	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.horizontal_alignment = Control.HORIZONTAL_ALIGNMENT_CENTER
 	t.add_theme_font_size_override("font_size", 48)
 	vbox.add_child(t)
 	var b := Label.new()
 	b.text = body
-	b.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	b.horizontal_alignment = Control.HORIZONTAL_ALIGNMENT_CENTER
 	b.add_theme_font_size_override("font_size", 24)
 	vbox.add_child(b)
 	var close := TouchButton.new()

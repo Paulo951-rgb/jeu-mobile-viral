@@ -29,7 +29,7 @@ var _overlay: Control
 
 func _build_ui() -> void:
 	var safe := SafeAreaContainer.new()
-	safe.set_anchors_preset(PRESET_FULL_RECT)
+	safe.set_anchors_preset(Control.PRESET_FULL_RECT)
 	add_child(safe)
 
 	var top := HBoxContainer.new()
@@ -53,11 +53,11 @@ func _make_stat(parent: HBoxContainer, title: String, value: String) -> Label:
 	var col := VBoxContainer.new()
 	var t := Label.new()
 	t.text = title.to_upper()
-	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.horizontal_alignment = Control.HORIZONTAL_ALIGNMENT_CENTER
 	t.add_theme_color_override("font_color", Color(0.6, 0.65, 0.75))
 	var v := Label.new()
 	v.text = value
-	v.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	v.horizontal_alignment = Control.HORIZONTAL_ALIGNMENT_CENTER
 	v.add_theme_font_size_override("font_size", 28)
 	col.add_child(t)
 	col.add_child(v)
@@ -74,18 +74,18 @@ func _on_pause_pressed() -> void:
 func _show_overlay(title: String, action_text: String) -> void:
 	_hide_overlay()
 	_overlay = Control.new()
-	_overlay.set_anchors_preset(PRESET_FULL_RECT)
+	_overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	var color := ColorRect.new()
 	color.color = Color(0, 0, 0, 0.55)
-	color.set_anchors_preset(PRESET_FULL_RECT)
+	color.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_overlay.add_child(color)
 	var vbox := VBoxContainer.new()
 	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
-	vbox.set_anchors_preset(PRESET_FULL_RECT)
+	vbox.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_overlay.add_child(vbox)
 	var t := Label.new()
 	t.text = title
-	t.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	t.horizontal_alignment = Control.HORIZONTAL_ALIGNMENT_CENTER
 	t.add_theme_font_size_override("font_size", 48)
 	vbox.add_child(t)
 	var b := TouchButton.new()
