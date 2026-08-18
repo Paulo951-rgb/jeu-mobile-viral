@@ -18,8 +18,8 @@ func _ready() -> void:
 
 
 func _ensure_min_size(current: Vector2) -> Vector2:
-	var scale := _density_scale()
-	var min_px := min_touch_dp * scale
+	var scale_factor := _density_scale()
+	var min_px := min_touch_dp * scale_factor
 	return Vector2(max(current.x, min_px), max(current.y, min_px))
 
 

@@ -16,6 +16,10 @@ func _ready() -> void:
 
 func _apply_orientation() -> void:
 	# Single source of truth lives in AppConfig.ORIENTATION; mirror to runtime.
+	# Only apply on mobile: desktop display servers (Windows/X11/macOS) don't
+	# support programmatic screen orientation and would log an error.
+	if not AppConfig.is_mobile():
+		return
 	var screen := DisplayServer.window_get_current_screen()
 	match AppConfig.ORIENTATION:
 		"portrait":

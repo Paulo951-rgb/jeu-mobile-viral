@@ -163,10 +163,11 @@ capabilities).
 
 ## Localization
 
-`src/data/translations.csv` is a multi-language CSV (Godot compiles it to
-per-locale `.translation` resources on import). Add a language by adding a
-column (e.g. `es`) and referencing strings via `tr("KEY")`. Fallback locale is
-`en`.
+`src/data/translations.csv` is a multi-language CSV loaded at runtime by
+`AppConfig` (not via Godot's translation importer) into `TranslationServer`.
+Add a language by adding a column (e.g. `es`) and referencing strings via
+`tr("KEY")`. Fallback locale is `en`. Missing/empty values are skipped, so
+partial translations don't break startup.
 
 ## Orientation change
 

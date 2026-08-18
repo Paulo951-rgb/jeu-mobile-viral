@@ -63,7 +63,9 @@ pause={
 
 [internationalization]
 
-locale/translations=PackedStringArray("res://src/data/translations.csv")
+; Translations are loaded at runtime from src/data/translations.csv by AppConfig
+; (see src/autoload/app_config.gd) to avoid depending on Godot's translation
+; importer and to never block startup if the CSV is missing.
 locale/fallback="en"
 
 [physics]
