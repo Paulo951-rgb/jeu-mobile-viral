@@ -14,13 +14,15 @@ func _ready() -> void:
 
 func _apply_safe_area() -> void:
 	# Window.get_safe_area() returns the safe rect in viewport-local coords on
-	# all platforms (no insets on desktop). Convert to margins for the container.
+	# all platforms (no insets on desktop). Convert to the MarginContainer's
+	# margin_left/top/right/bottom theme constants (NOT add_theme_margin_override,
+	# which does not exist in Godot 4.x).
 	var win := get_window()
 	if win == null:
 		return
 	var safe: Rect2i = win.get_safe_area()
 	var vp_size := win.get_size()  # full viewport Vector2i
-	add_theme_margin_override("margin_left", float(safe.position.x))
-	add_theme_margin_override("margin_top", float(safe.position.y))
-	add_theme_margin_override("margin_right", float(max(vp_size.x - safe.end.x, 0)))
-	add_theme_margin_override("margin_bottom", float(max(vp_size.y - safe.end.y, 0)))
+	add_theme_constant_override("margin_left", safe.position.x)
+	add_theme_constant_override("margin_top", safe.position.y)
+	add_theme_constant_override("margin_right", max(vp_size.x - safe.end.x, 0))
+	add_theme_constant_override("margin_bottom", max(vp_size.y - safe.end.y, 0))

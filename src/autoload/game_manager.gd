@@ -47,7 +47,8 @@ func add_score(amount: int) -> void:
 	score += max(amount, 0)
 	# Level derives from score so it can never desync regardless of score
 	# increments (handles variable rewards without skipping thresholds).
-	var new_level := AppConfig.STARTING_LEVEL + int(score / AppConfig.SCORE_PER_LEVEL)
+	# floori() makes the integer-division intent explicit (no warning).
+	var new_level := AppConfig.STARTING_LEVEL + floori(score / float(AppConfig.SCORE_PER_LEVEL))
 	if new_level != level:
 		level = new_level
 		level_changed.emit(level)
