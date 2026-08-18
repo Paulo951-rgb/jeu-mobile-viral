@@ -32,14 +32,22 @@ iOS (App Store). Portrait-first, touch-first, safe-area aware, responsive.
   CanvasLayer, `process_mode=ALWAYS` so pause overlay stays interactive). HUD
   subscribes to GameManager signals. SceneManager owns a persistent black fade
   CanvasLayer (layer 100, `process_mode=ALWAYS`).
-- Gameplay: `JunkItem` (Area2D, falls) emits `body_collected` (overlap with
-  player) or `exited_screen` (fell off bottom = miss). Collecting awards
-  `SCORE_PER_JUNK`/`COINS_PER_JUNK`; level derives from score
+- Gameplay: `JunkItem` (Area2D, falls) emits `collected` (via `area_entered` —
+  the correct Area2D↔Area2D signal; `body_entered` would never fire between two
+  Area2D nodes) or `exited_screen` (fell off bottom = miss). Collecting awards
+  `SCORE_PER_JUNK`/`COINS_PER_JUNK` + a light haptic; level derives from score
   (`STARTING_LEVEL + score / SCORE_PER_LEVEL`); spawn interval shrinks per
   level. Missing `MAX_MISSED_JUNK` pieces ends the run (`GameManager.end_run`
-  → `game_over` signal → HUD overlay → back to menu).
-- Controls: touch (mobile) + mouse (desktop) in `GameScene._input`. Pause via
-  on-screen button or the `pause` input action (Esc on desktop).
+  → `game_over` signal → HUD overlay with REPLAY + MENU).
+- Controls: keyboard WASD/arrows (desktop) + `VirtualJoystick` (mobile) in
+  `GameScene._physics_process`. Movement is velocity-based, clamped to the
+  viewport. Pause via on-screen button or the `pause` input action (Esc).
+- Godot 4.7.x API gotchas (DO NOT regress):
+  - `Window.get_safe_area()` does NOT exist → use `DisplayServer.get_display_safe_area()`.
+  - `add_theme_margin_override()` does NOT exist → use `add_theme_constant_override("margin_*", int)` on MarginContainer.
+  - `PRESET_*` / `HORIZONTAL_ALIGNMENT_*` must be `Control.`-prefixed in scripts that don't extend Control (e.g. `GameHud` extends CanvasLayer).
+  - `body_entered` is for PhysicsBody2D; two Area2D nodes need `area_entered`.
+  - `Array[String].pop_back()` is valid; `PackedStringArray.pop_back()` is NOT.
 
 ## Build / export
 - `export_presets.cfg` ships presets: Android (Debug APK), Android (Release

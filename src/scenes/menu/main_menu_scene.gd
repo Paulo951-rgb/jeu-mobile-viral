@@ -52,6 +52,14 @@ func _build_ui() -> void:
 	play.pressed.connect(_on_play_pressed)
 	vbox.add_child(play)
 
+	var upgrades := _make_button(tr("UPGRADES"), false)
+	upgrades.pressed.connect(_on_upgrades_pressed)
+	vbox.add_child(upgrades)
+
+	var shop := _make_button(tr("SHOP"), false)
+	shop.pressed.connect(_on_shop_pressed)
+	vbox.add_child(shop)
+
 	var settings := _make_button(tr("SETTINGS"), false)
 	settings.pressed.connect(_on_settings_pressed)
 	vbox.add_child(settings)
@@ -101,6 +109,14 @@ func _on_play_pressed() -> void:
 
 func _on_settings_pressed() -> void:
 	_show_info_overlay(tr("SETTINGS"), tr("SETTINGS_COMING"))
+
+
+func _on_upgrades_pressed() -> void:
+	_show_info_overlay(tr("UPGRADES"), tr("UPGRADES_COMING"))
+
+
+func _on_shop_pressed() -> void:
+	_show_info_overlay(tr("SHOP"), tr("SHOP_COMING"))
 
 
 func _show_info_overlay(title: String, body: String) -> void:

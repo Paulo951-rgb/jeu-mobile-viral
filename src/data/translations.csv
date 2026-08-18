@@ -2,6 +2,10 @@ keys,en
 APP_NAME,JunkYardRush
 TAGLINE,Tap to collect junk & build treasure
 PLAY,PLAY
+UPGRADES,Upgrades
+UPGRADES_COMING,Upgrades coming soon
+SHOP,Shop
+SHOP_COMING,Shop coming soon
 SETTINGS,Settings
 SETTINGS_COMING,Settings panel coming soon
 SCORE,Score
@@ -12,3 +16,4 @@ PAUSED,Paused
 RESUME,Resume
 GAME_OVER,Game Over
 MENU,Menu
+REPLAY,Replay
